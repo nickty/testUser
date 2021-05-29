@@ -1,0 +1,32 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+.bg {
+  background-color: aquamarine;
+}
+.left {
+  text-align: left !important;
+}
+.bgs {
+  background-color: antiquewhite;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.dd {
+  background-color: gray;
+  padding: 10px;
+  border-radius: 10px;
+  margin: 10px;
+}
+
+@media screen and (max-width: 600px) {
+  .dd {
+    background-color: red;
+  }
+  .bg {
+    margin-top: 20px !important;
+  }
+}
