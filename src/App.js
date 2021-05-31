@@ -1,11 +1,18 @@
 import "./styles.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function App() {
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+
+  useEffect(() => {
+   getAllUser();
+  }, [])
+
+  console.log('I am not from use effect')
 
   const onChangeData = (data) => {
     setName(data);
@@ -14,11 +21,19 @@ export default function App() {
     setEmail(data);
   };
 
-  const submitData = (e) => {
+  const getAllUser = async () => {
+    const getData = await axios.get('/getusers')
+      .then(user => {
+        console.log(user.data) 
+      })
+  }
+
+  const submitData = async (e) => {
     e.preventDefault();
 
     const data = {
-      name, email
+      name : name, 
+      email : email
     }
 
     const config = {
@@ -27,9 +42,9 @@ export default function App() {
       }
     }
 
-    const sendData = axios.post('/register', data, config)
-      .then(res => console.log(res.data))
-                      
+    const sendData = await axios.post('/register', data, config)
+      .then(res => console.log(res))
+                            
     
     
   };
@@ -63,6 +78,7 @@ export default function App() {
                 onChange={(e) => onChangeData(e.target.value)}
                 value={name}
                 placeholder="name"
+               
               />
             </div>
             <div className="form-group">
@@ -74,18 +90,17 @@ export default function App() {
                 onChange={(e) => onChangeData2(e.target.value)}
                 placeholder="Email"
                 value={email}
+                
               />
             </div>
-            <button className="btn btn-primary mt-2">Register</button>
+            <button type="submit" className="btn btn-primary mt-2">Register</button>
           </form>
         </div>
       </div>
-      <div className="row">
-        {/* <button onClick={getData} className="btn btn-info mt-5">Get Data</button>
+      <div className="row mt-5 p-3">
+        All users
 
-       if(allUser){
-         allUser
-       } */}
+       
       </div>
     </div>
   );

@@ -13,18 +13,35 @@ app.use(cors())
 app.use(express.json())
 
 app.get('/', (req, res) => {
-    res.send('Hello')
+    res.send('Hello world')
 })
+app.get('/getusers', async(req, res) => {
+    const user = await User.find();
 
+    res.status(200).send(user);
+
+})
 app.post('/register', (req, res) => {
-    
+
+    // console.log(req.body);
+
     const user = User(req.body)
 
     user.save()
+        .then( backuser => {
+            res.status(200).send(backuser)
+        })
+        .catch( err => {
+            
+            console.log(err)
+
+            res.status(400).send(err)
+
+        })
 
     // console.log(user)
 
-    res.send(user)
+    
 
 })
 
