@@ -5,12 +5,16 @@ import axios from "axios";
 
 export default function App() {
 
+  const [allUser, setAllUser] = useState([]); 
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [deleted, setDeleted] = useState(false);
+ 
 
   useEffect(() => {
    getAllUser();
-  }, [])
+  }, [deleted, allUser])
 
   console.log('I am not from use effect')
 
@@ -24,7 +28,7 @@ export default function App() {
   const getAllUser = async () => {
     const getData = await axios.get('/getusers')
       .then(user => {
-        console.log(user.data) 
+         setAllUser(user.data)  
       })
   }
 
@@ -55,6 +59,14 @@ export default function App() {
   // }
 
   // getData();
+
+  const deleteFunc = async (item) => {
+    console.log(item)
+
+  await axios.delete(`/userDelete/${item}`)
+    .then(res => setDeleted(true))
+
+  }
 
   return (
     <div className="container mt-4">
@@ -100,6 +112,34 @@ export default function App() {
       <div className="row mt-5 p-3">
         All users
 
+        <table className="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Options</th>
+            </tr>
+          </thead>
+          <tbody>
+            
+
+            {allUser.map( xx => (
+          <tr key={xx._id}>
+          <th scope="row">{xx._id}</th>
+          <td>{xx.name}</td>
+          <td>{xx.email}</td>
+          <td>
+            <button className="btn btn-info">Edit</button>
+            <button onClick={()=>deleteFunc(xx._id)} className="btn btn-danger">Delete</button>
+          </td>
+        </tr>
+        ))}
+            
+          </tbody>
+        </table>
+
+       
        
       </div>
     </div>

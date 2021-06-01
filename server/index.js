@@ -21,6 +21,17 @@ app.get('/getusers', async(req, res) => {
     res.status(200).send(user);
 
 })
+app.delete('/userDelete/:id', async (req, res) => {
+    const id = req.params.id
+
+    const user = await User.findById(req.params.id)
+
+    await user.remove()
+
+    res.status(200).json({
+        success: true
+    })
+})
 app.post('/register', (req, res) => {
 
     // console.log(req.body);
