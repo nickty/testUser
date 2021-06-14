@@ -1,20 +1,38 @@
 import "./styles.css";
+
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
+import closeButton from "react-bootstrap/CloseButton"
 import "bootstrap/dist/css/bootstrap.min.css";
+
 import { useState, useEffect } from "react";
 import axios from "axios";
 
 export default function App() {
 
+  const [show, setShow] = useState(false);
+
   const [allUser, setAllUser] = useState([]); 
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [deleted, setDeleted] = useState(false);
+  const [deleted, setDeleted] = useState('');
+  const [register, setRegister] = useState('');
+
+
+  const [userName, setUserName] = useState('')
+  const [userEmail, setUserEmail] = useState('')
+
+
+
  
 
   useEffect(() => {
-   getAllUser();
-  }, [deleted, allUser])
+    getAllUser();
+   console.log("use effect")
+  }, [deleted, register])
+
+  
 
   console.log('I am not from use effect')
 
@@ -26,11 +44,14 @@ export default function App() {
   };
 
   const getAllUser = async () => {
-    const getData = await axios.get('/getusers')
+    await axios.get('/getusers')
       .then(user => {
          setAllUser(user.data)  
+         console.log(user.data)
       })
   }
+
+  
 
   const submitData = async (e) => {
     e.preventDefault();
@@ -47,7 +68,8 @@ export default function App() {
     }
 
     const sendData = await axios.post('/register', data, config)
-      .then(res => console.log(res))
+      .then(res => setRegister(res.data))
+      .catch(err => console.log(err.response))
                             
     
     
@@ -63,10 +85,23 @@ export default function App() {
   const deleteFunc = async (item) => {
     console.log(item)
 
-  await axios.delete(`/userDelete/${item}`)
-    .then(res => setDeleted(true))
+      await axios.delete(`/userDelete/${item}`)
+    .then(res => setDeleted(res.data))
 
   }
+
+  const handleShow = async (xxx) => {
+
+    await axios.get(`/getuser/${xxx}`)
+    .then(user => {
+      setUserName(user.data.name)
+      setUserEmail(user.data.email)
+    })
+
+    setShow(true)
+
+  }
+  const handleClose = () => setShow(false)
 
   return (
     <div className="container mt-4">
@@ -130,7 +165,7 @@ export default function App() {
           <td>{xx.name}</td>
           <td>{xx.email}</td>
           <td>
-            <button className="btn btn-info">Edit</button>
+            <button className="btn btn-info" onClick={() => handleShow(xx._id)}>Edit</button>
             <button onClick={()=>deleteFunc(xx._id)} className="btn btn-danger">Delete</button>
           </td>
         </tr>
@@ -142,6 +177,34 @@ export default function App() {
        
        
       </div>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Modal heading</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form>
+            <div className="form-group">
+                <label for="">Name</label>
+                <input className="form-control" type="text" name="" value={userName && userName} />
+              </div>
+
+              <div className="form-group">
+                <label for="">Email</label>
+                <input className="form-control" type="email" name="" value={userEmail && userEmail} />
+              </div>
+           
+          </form>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleClose}>
+            Save Changes
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 }

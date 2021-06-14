@@ -12,17 +12,20 @@ mongoose.connect('mongodb://127.0.0.1:27017/user')
 app.use(cors())
 app.use(express.json())
 
+
 app.get('/', (req, res) => {
     res.send('Hello world')
 })
 app.get('/getusers', async(req, res) => {
     const user = await User.find();
 
+    console.log(user)
+
     res.status(200).send(user);
 
 })
 app.delete('/userDelete/:id', async (req, res) => {
-    const id = req.params.id
+    // const id = req.params.id
 
     const user = await User.findById(req.params.id)
 
@@ -31,6 +34,13 @@ app.delete('/userDelete/:id', async (req, res) => {
     res.status(200).json({
         success: true
     })
+})
+
+app.get('/getuser/:id', async (req, res) => {
+
+    const user = await User.findById(req.params.id)
+
+    res.status(200).send(user)
 })
 app.post('/register', (req, res) => {
 
@@ -44,7 +54,7 @@ app.post('/register', (req, res) => {
         })
         .catch( err => {
             
-            console.log(err)
+            // console.log(err)
 
             res.status(400).send(err)
 
