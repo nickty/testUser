@@ -20,8 +20,10 @@ export default function App() {
   const [register, setRegister] = useState('');
 
 
-  const [userName, setUserName] = useState('')
-  const [userEmail, setUserEmail] = useState('')
+  // const [userName, setUserName] = useState('')
+  // const [userEmail, setUserEmail] = useState('')
+
+  const [userId, setUserId] = useState('')
 
 
 
@@ -94,14 +96,44 @@ export default function App() {
 
     await axios.get(`/getuser/${xxx}`)
     .then(user => {
-      setUserName(user.data.name)
-      setUserEmail(user.data.email)
+      setName(user.data.name)
+      setEmail(user.data.email)
+      setUserId(user.data._id)
     })
 
     setShow(true)
 
   }
   const handleClose = () => setShow(false)
+
+  const saveChange = async () => {
+    
+    setShow(false)
+
+    const data = {
+      name : name, 
+      email : email
+    }
+
+    const config = {
+      headers: {
+        'Content-Type' : 'application/json'
+      }
+    }
+
+    await axios.put(`/userupdate/${userId}`, data, config)
+    .then(user => {
+      const index = allUser.findIndex(user => user._id === userId)
+
+      let update = allUser(index)
+
+      update.name = userName; 
+      update.email = userEmail;
+
+      setAllUser([ ...allUser, ...update])
+    })
+
+  }
 
   return (
     <div className="container mt-4">
@@ -186,12 +218,12 @@ export default function App() {
           <form>
             <div className="form-group">
                 <label for="">Name</label>
-                <input className="form-control" type="text" name="" value={userName && userName} />
+                <input className="form-control" onClick={(e) => setName(e.target.value)} type="text" name="" value={name} />
               </div>
 
               <div className="form-group">
                 <label for="">Email</label>
-                <input className="form-control" type="email" name="" value={userEmail && userEmail} />
+                <input className="form-control" onClick={(e) => setEmail(e.target.value)} type="email" name="" value={email} />
               </div>
            
           </form>
@@ -200,7 +232,7 @@ export default function App() {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleClose}>
+          <Button variant="primary" onClick={saveChange}>
             Save Changes
           </Button>
         </Modal.Footer>

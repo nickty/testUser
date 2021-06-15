@@ -42,6 +42,17 @@ app.get('/getuser/:id', async (req, res) => {
 
     res.status(200).send(user)
 })
+
+app.put('/userupdate/:id', async (req, res) => {
+    
+    const user = await Product.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false
+    })
+
+    res.status(200).send(user)
+})
 app.post('/register', (req, res) => {
 
     // console.log(req.body);
