@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Form } from 'react-bootstrap'
 import NavbarMain from '../Navbar/Navbar'
 
 const Register = () => {
+
+
+    const [gender, setGender] = useState('')
+
+    let genders = ["male", "female", "Guy"]
 
     return (
         <>
@@ -44,25 +49,16 @@ const Register = () => {
 
                 <div className="form-group">
                     <label>Genter: </label><br />
+
+                    {genders.map(result => ( <Form.Check
+                        type="radio"
+                        label={result}
+                        name="formHorizontalRadios"
+                        onChange={e => setGender(e.target.value)}
+                        value={result}
+                        />))}
                     
-                    <Form.Check
-                        type="radio"
-                        label="Male"
-                        name="formHorizontalRadios"
-                        id="formHorizontalRadios1"
-                        />
-                        <Form.Check
-                        type="radio"
-                        label="Female"
-                        name="formHorizontalRadios"
-                        id="formHorizontalRadios2"
-                        />
-                        <Form.Check
-                        type="radio"
-                        label="Not wish to answer"
-                        name="formHorizontalRadios"
-                        id="formHorizontalRadios3"
-                        />
+                                         
                 </div>
                 <br />
                 <div className="form-group">
@@ -78,7 +74,6 @@ const Register = () => {
                 <br />
                 <button type="submit" className="btn btn-info">Register</button>
                 
-
             </form>
         </div>
         </>
