@@ -6,8 +6,11 @@ const Register = () => {
 
 
     const [gender, setGender] = useState('')
+    const [country, setOption] = useState('')
 
     let genders = ["male", "female", "Guy"]
+
+    let options = ['USA', 'UK', 'EU', 'AU']
 
     return (
         <>
@@ -39,11 +42,9 @@ const Register = () => {
 
                 <div className="form-group">
                     <label for="country">Select your Country</label>
-                    <select className="form-control">
+                    <select className="form-control" onChange={e=> setOption(e.target.value)}>
                         <option disabled>Your country</option>
-                        <option>USA</option>
-                        <option>UK</option>
-                        <option>EU</option>
+                       {options.map( xx => (<option value={xx}>{xx}</option>))}
                     </select>
                 </div>
 
@@ -75,6 +76,7 @@ const Register = () => {
                 <button type="submit" className="btn btn-info">Register</button>
                 
             </form>
+            {country}
         </div>
         </>
     )
