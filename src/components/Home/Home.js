@@ -9,6 +9,7 @@ import axios from "axios";
 
 import Card from '../Card';
 import NavbarMain from '../Navbar/Navbar';
+import Footer from '../footer/Footer';
 
 const Home = () => {
 
@@ -249,6 +250,7 @@ const Home = () => {
           </Modal.Footer>
         </Modal>
       </div>
+      <Footer /> 
       </>
     );
 }
